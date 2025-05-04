@@ -1,3 +1,5 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
+
 import 'package:flutter/material.dart';
 import 'package:money_service_server/color_constant/color_constant.dart';
 
@@ -192,9 +194,8 @@ class _RegisterUIState extends State<RegisterUI> {
                       SizedBox(height: 30),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          elevation: 10, // ความสูงของเงา ยิ่งมากยิ่งเงาเข้ม
-                          shadowColor: Colors.black, // สีเงา// สีปุ่ม
-                          // ignore: use_full_hex_values_for_flutter_colors
+                          elevation: 10,
+                          shadowColor: Colors.black,
                           backgroundColor: Color(0xffe438883),
                           minimumSize: Size(400, 70),
                         ),
