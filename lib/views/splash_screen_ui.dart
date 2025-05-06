@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, annotate_overrides
 
 import 'package:flutter/material.dart';
-import 'package:money_service_server/color_constant/color_constant.dart';
+import 'package:money_service_server/constant/color_constant.dart';
 
 import 'package:money_service_server/views/welcome_ui.dart';
 

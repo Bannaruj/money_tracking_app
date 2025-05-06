@@ -38,7 +38,7 @@ class _WelcomeUIState extends State<WelcomeUI> {
                   minimumSize: Size(400, 70),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginUI()),
                   );
@@ -55,7 +55,7 @@ class _WelcomeUIState extends State<WelcomeUI> {
                   Text('ยังไม่ได้ลงทะเบียน? '),
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => RegisterUI()),
                       );

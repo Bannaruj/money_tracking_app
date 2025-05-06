@@ -1,7 +1,12 @@
-// ignore_for_file: use_full_hex_values_for_flutter_colors
+// ignore_for_file: use_full_hex_values_for_flutter_colors, use_build_context_synchronously
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:money_service_server/color_constant/color_constant.dart';
+import 'package:money_service_server/constant/color_constant.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:money_service_server/models/user.dart';
+import 'package:money_service_server/services/user_api.dart';
 
 class RegisterUI extends StatefulWidget {
   const RegisterUI({super.key});
@@ -11,6 +16,44 @@ class RegisterUI extends StatefulWidget {
 }
 
 class _RegisterUIState extends State<RegisterUI> {
+  TextEditingController userFullnameCtrl = TextEditingController();
+  TextEditingController userBirthDateCtrl = TextEditingController();
+  TextEditingController userNameCtrl = TextEditingController();
+  TextEditingController userPasswordCtrl = TextEditingController();
+
+  bool isVisible = true;
+  File? userFile;
+
+  Future<void> openCamera() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (image == null) return;
+
+    setState(() {
+      userFile = File(image.path);
+    });
+  }
+
+  showWarningSnackBar(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  showCompleteSnackBar(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,17 +102,31 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                       SizedBox(height: 30),
                       InkWell(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.person_add,
-                          size: 100,
-                          color: Colors.grey,
-                        ),
+                        onTap: () async {
+                          await openCamera();
+                        },
+                        child:
+                            userFile == null
+                                ? Icon(
+                                  Icons.person_add,
+                                  size: 100,
+                                  color: Colors.grey,
+                                )
+                                : ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    userFile!,
+                                    width: 150,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                       ),
                       SizedBox(height: 40),
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          controller: userFullnameCtrl,
                           decoration: InputDecoration(
                             labelText: 'ชื่อ-สกุล',
                             labelStyle: TextStyle(color: Colors.teal),
@@ -100,6 +157,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          controller: userBirthDateCtrl,
                           decoration: InputDecoration(
                             suffixIcon: Icon(
                               Icons.calendar_month,
@@ -134,6 +192,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          controller: userNameCtrl,
                           decoration: InputDecoration(
                             labelText: 'ชื่อผู้ใช้',
                             labelStyle: TextStyle(color: Colors.teal),
@@ -164,8 +223,20 @@ class _RegisterUIState extends State<RegisterUI> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          obscureText: isVisible,
+                          controller: userPasswordCtrl,
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.lock, color: Colors.grey),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isVisible = !isVisible;
+                                });
+                              },
+                              icon: Icon(
+                                isVisible ? Icons.lock : Icons.lock_open,
+                                color: Colors.grey,
+                              ),
+                            ),
                             labelText: 'รหัสผ่าน',
                             labelStyle: TextStyle(color: Colors.teal),
                             hintText: 'PASSWORD',
@@ -199,7 +270,36 @@ class _RegisterUIState extends State<RegisterUI> {
                           backgroundColor: Color(0xffe438883),
                           minimumSize: Size(400, 70),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (userFullnameCtrl.text.trim().isEmpty) {
+                            showWarningSnackBar(context, 'กรุณากรอกชื่อ-สกุล');
+                          } else if (userBirthDateCtrl.text.trim().isEmpty) {
+                            showWarningSnackBar(
+                              context,
+                              'กรุณากรอกวัน-เดือน-ปีเกิด',
+                            );
+                          } else if (userNameCtrl.text.trim().isEmpty) {
+                            showWarningSnackBar(context, 'กรุณากรอกชื่อผู้ใช้');
+                          } else if (userPasswordCtrl.text.trim().isEmpty) {
+                            showWarningSnackBar(context, 'กรุณากรอกรหัสผ่าน');
+                          } else {
+                            User user = User(
+                              userFullname: userFullnameCtrl.text.trim(),
+                              userBirthDate: userBirthDateCtrl.text.trim(),
+                              userName: userNameCtrl.text.trim(),
+                              userPassword: userPasswordCtrl.text.trim(),
+                            );
+                            if (await UserApi().registerUser(user, userFile)) {
+                              showCompleteSnackBar(context, 'ลงทะเบียนสําเร็จ');
+                              Navigator.pop(context);
+                            } else {
+                              showWarningSnackBar(
+                                context,
+                                'ลงทะเบียนไม่สำเร็จ',
+                              );
+                            }
+                          }
+                        },
                         child: Text(
                           'บันทึกการลงทะเบียน',
                           style: TextStyle(color: Colors.white, fontSize: 18),

@@ -1,8 +1,11 @@
-// ignore_for_file: sort_child_properties_last, use_full_hex_values_for_flutter_colors
+// ignore_for_file: sort_child_properties_last, use_full_hex_values_for_flutter_colors, prefer_is_empty, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:money_service_server/color_constant/color_constant.dart';
+import 'package:money_service_server/constant/color_constant.dart';
+import 'package:money_service_server/models/user.dart';
+import 'package:money_service_server/services/user_api.dart';
 import 'package:money_service_server/views/home_ui.dart';
+import 'package:money_service_server/views/home_ui_section1.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -12,6 +15,21 @@ class LoginUI extends StatefulWidget {
 }
 
 class _LoginUIState extends State<LoginUI> {
+  TextEditingController userNameCtrl = TextEditingController();
+  TextEditingController userPasswordCtrl = TextEditingController();
+
+  bool isShowPassword = true;
+
+  showWarningSnackBar(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +71,7 @@ class _LoginUIState extends State<LoginUI> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          controller: userNameCtrl,
                           decoration: InputDecoration(
                             labelText: 'ชื่อผู้ใช้',
                             labelStyle: TextStyle(color: Colors.teal),
@@ -83,8 +102,23 @@ class _LoginUIState extends State<LoginUI> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
+                          obscureText: isShowPassword,
+                          controller: userPasswordCtrl,
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.lock, color: Colors.grey),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isShowPassword = !isShowPassword;
+                                });
+                              },
+                              icon:
+                                  isShowPassword == true
+                                      ? Icon(Icons.lock, color: Colors.grey)
+                                      : Icon(
+                                        Icons.lock_open,
+                                        color: Colors.grey,
+                                      ),
+                            ),
                             labelText: 'รหัสผ่าน',
                             labelStyle: TextStyle(color: Colors.teal),
                             hintText: 'PASSWORD',
@@ -118,11 +152,33 @@ class _LoginUIState extends State<LoginUI> {
                           backgroundColor: Color(0xffe438883),
                           minimumSize: Size(400, 70),
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomeUI()),
-                          );
+                        onPressed: () async {
+                          if (userNameCtrl.text.length == 0) {
+                            showWarningSnackBar(context, 'ป้อนชื่อผู้ใช้....');
+                          } else if (userPasswordCtrl.text.length == 0) {
+                            showWarningSnackBar(context, 'ป้อนรหัสด้วย');
+                          } else {
+                            User user = User(
+                              userName: userNameCtrl.text,
+                              userPassword: userPasswordCtrl.text,
+                            );
+                            user = await UserApi().loginUser(user);
+                            if (user.userId != null) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => HomeUI(
+                                        userName: user.userFullname,
+                                        userImage: user.userImage,
+                                        userId: int.parse(
+                                          user.userId.toString(),
+                                        ),
+                                      ),
+                                ),
+                              );
+                            }
+                          }
                         },
                         child: Text(
                           'เข้าใช้งาน',
