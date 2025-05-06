@@ -1,3 +1,5 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
+
 import 'package:flutter/material.dart';
 import 'package:money_service_server/color_constant/color_constant.dart';
 
@@ -36,20 +38,76 @@ class _HomeUISection1State extends State<HomeUISection1> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: MediaQuery.of(context).size.height * 0.25,
                   decoration: BoxDecoration(color: Color(mainColor)),
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'ยอดเงินคงเหลือ',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        '2,500.00',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Icon(Icons.arrow_downward, color: Colors.white70),
+                              Text(
+                                'ยอดเงินเข้ารวม',
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                '5,700.00',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Icon(Icons.arrow_upward, color: Colors.white70),
+                              Text(
+                                'ยอดเงินออกรวม',
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                '2,200.00',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 40),
             Text(
               'เงินเข้า',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),
-            // ✅ ฟอร์มผู้ใช้
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
