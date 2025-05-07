@@ -5,7 +5,6 @@ import 'package:money_service_server/constant/color_constant.dart';
 import 'package:money_service_server/models/user.dart';
 import 'package:money_service_server/services/user_api.dart';
 import 'package:money_service_server/views/home_ui.dart';
-import 'package:money_service_server/views/home_ui_section1.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});

@@ -1,16 +1,48 @@
-// ignore_for_file: use_full_hex_values_for_flutter_colors
+// ignore_for_file: use_full_hex_values_for_flutter_colors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:money_service_server/constant/color_constant.dart';
+import 'package:money_service_server/models/money.dart';
+import 'package:money_service_server/services/money_api.dart';
 
 class HomeUISection1 extends StatefulWidget {
-  const HomeUISection1({super.key});
+  final int userId;
+  final Function refreshData;
+  const HomeUISection1({
+    required this.userId,
+    required this.refreshData,
+    super.key,
+  });
 
   @override
   State<HomeUISection1> createState() => _HomeUISection1State();
 }
 
 class _HomeUISection1State extends State<HomeUISection1> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController moneyDetailCtrl = TextEditingController();
+  TextEditingController incomeAmoutCtrl = TextEditingController();
+  TextEditingController incomeDateCtrl = TextEditingController();
+
+  showWarningSnackBar(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  showCompleteSnackBar(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +58,7 @@ class _HomeUISection1State extends State<HomeUISection1> {
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
+                controller: moneyDetailCtrl,
                 decoration: InputDecoration(
                   labelText: 'รายการเงินเข้า',
                   labelStyle: TextStyle(color: Colors.teal),
@@ -53,6 +86,7 @@ class _HomeUISection1State extends State<HomeUISection1> {
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
+                controller: incomeAmoutCtrl,
                 decoration: InputDecoration(
                   labelText: 'จำนวนเงินเข้า',
                   labelStyle: TextStyle(color: Colors.teal),
@@ -80,6 +114,7 @@ class _HomeUISection1State extends State<HomeUISection1> {
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
+                controller: incomeDateCtrl,
                 decoration: InputDecoration(
                   suffixIcon: Icon(Icons.calendar_month, color: Colors.grey),
                   labelText: 'วัน เดือน ปีที่เงินเข้า',
@@ -112,7 +147,27 @@ class _HomeUISection1State extends State<HomeUISection1> {
                 backgroundColor: Color(0xffe438883),
                 minimumSize: Size(370, 80),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  Money moneyIncome = Money(
+                    moneyDetail: moneyDetailCtrl.text.trim(),
+                    moneyInOut: double.parse(incomeAmoutCtrl.text.trim()),
+                    moneyDate: incomeAmoutCtrl.text.trim(),
+                    moneyType: 1,
+                    userId: widget.userId,
+                  );
+                  if (await MoneyApi().inOutMoney(moneyIncome)) {
+                    showCompleteSnackBar(context, 'บันทึกสำเร็จ');
+                    moneyDetailCtrl.clear();
+                    incomeAmoutCtrl.clear();
+                    incomeDateCtrl.clear();
+                    widget.refreshData();
+                  } else {
+                    showWarningSnackBar(context, 'บันทึกไม่สำเร็จ');
+                  }
+                }
+              },
+
               child: Text(
                 'บันทึกเงินเข้า',
                 style: TextStyle(color: Colors.white, fontSize: 20),
