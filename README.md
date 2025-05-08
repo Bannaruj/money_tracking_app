@@ -1,16 +1,16 @@
-# money_service_server
+# Flutter Project: money_tracking_app
+###UI Project หน้าจอ Splashscreen,Welcome,Register,Login,Home,
 
-A new Flutter project.
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141551.png?raw=true)" width = 150>
 
-## Getting Started
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141608.png?raw=true)" width = 150>
 
-This project is a starting point for a Flutter application.
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141618.png?raw=true)" width = 150>
 
-A few resources to get you started if this is your first Flutter project:
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141728.png?raw=true)" width = 150>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141738.png?raw=true)" width = 150>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="[https://github.com/user-attachments/assets/27a01166-225d-43d4-b031-13ae785143c6](https://github.com/Bannaruj/money_tracking_app/blob/main/Screenshot%202025-05-07%20141748.png?raw=true)" width = 150>
+
+
