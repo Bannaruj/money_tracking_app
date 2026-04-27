@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_service_server/constant/color_constant.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_service_server/models/user.dart';
@@ -52,6 +53,20 @@ class _RegisterUIState extends State<RegisterUI> {
         duration: Duration(seconds: 2),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        userBirthDateCtrl.text = DateFormat('dd MMMM yyyy').format(picked);
+      });
+    }
   }
 
   @override
@@ -158,10 +173,15 @@ class _RegisterUIState extends State<RegisterUI> {
                         padding: EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
                           controller: userBirthDateCtrl,
+                          readOnly: true,
+                          onTap: () => _selectDate(context),
                           decoration: InputDecoration(
-                            suffixIcon: Icon(
-                              Icons.calendar_month,
-                              color: Colors.grey,
+                            suffixIcon: IconButton(
+                              onPressed: () => _selectDate(context),
+                              icon: Icon(
+                                Icons.calendar_month,
+                                color: Colors.teal,
+                              ),
                             ),
                             labelText: 'วัน-เดือน-ปีเกิด',
                             labelStyle: TextStyle(color: Colors.teal),

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_service_server/views/splash_screen_ui.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:money_service_server/constant/env_constant.dart';
 
-void main() {
-  runApp(MoneyTrackingApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: supabaseKey,
+  );
+  runApp(const MoneyTrackingApp());
 }
 
 class MoneyTrackingApp extends StatefulWidget {

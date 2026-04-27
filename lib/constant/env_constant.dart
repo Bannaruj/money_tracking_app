@@ -1,0 +1,3 @@
+const String supabaseUrl = 'https://dwocwsiphtbzmnfeilcg.supabase.co';
+const String supabaseKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3b2N3c2lwaHRiem1uZmVpbGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyOTkxMTAsImV4cCI6MjA5Mjg3NTExMH0.TvKDpmo_uU08uDHivoDTUdzdYK2FtqabojzaWBRfZ_I';

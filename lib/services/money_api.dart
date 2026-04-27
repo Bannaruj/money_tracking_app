@@ -1,19 +1,20 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
 
-import 'package:dio/dio.dart';
-import 'package:money_service_server/constant/baseurl_constant.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:money_service_server/models/money.dart';
 
 class MoneyApi {
-  final dio = Dio();
+  final supabase = Supabase.instance.client;
 
   Future<List<Money>> getMoneyByUserId(int userId) async {
     try {
-      final responseData = await dio.get('$baseUrl/money/$userId');
-      if (responseData.statusCode == 200) {
-        return (responseData.data['info'] as List)
-            .map((money) => Money.fromJson(money))
-            .toList();
+      final List<dynamic> data = await supabase
+          .from('money_tb')
+          .select()
+          .eq('userId', userId);
+          
+      if (data.isNotEmpty) {
+        return data.map((money) => Money.fromJson(money)).toList();
       } else {
         return <Money>[];
       }
@@ -33,17 +34,9 @@ class MoneyApi {
         'userId': money.userId,
       };
 
-      final responseData = await dio.post(
-        '$baseUrl/money/',
-        data: requestBody,
-        options: Options(headers: {'content-type': 'application/json'}),
-      );
+      await supabase.from('money_tb').insert(requestBody);
 
-      if (responseData.statusCode == 201) {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
     } catch (err) {
       print('ERROR: ${err.toString()}');
       return false;
