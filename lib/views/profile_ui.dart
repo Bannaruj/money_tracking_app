@@ -83,8 +83,10 @@ class _ProfileUIState extends State<ProfileUI> {
                                   ? NetworkImage(Supabase.instance.client.storage
                                       .from('user_images')
                                       .getPublicUrl(widget.userImage!))
-                                  : const AssetImage('assets/images/TahmKench_0.jpg')
-                                      as ImageProvider),
+                                  : null),
+                          child: (userFile == null && (widget.userImage == null || widget.userImage!.isEmpty))
+                              ? Icon(Icons.person, size: 80, color: Colors.grey[400])
+                              : null,
                         ),
                       ),
                       Positioned(

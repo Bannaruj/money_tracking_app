@@ -284,18 +284,16 @@ class _HomeUI extends State<HomeUI> {
                           child: CircleAvatar(
                             radius: 24,
                             backgroundColor: Colors.grey[200],
-                            backgroundImage:
-                                (widget.userImage == null ||
-                                        widget.userImage!.isEmpty)
-                                    ? const AssetImage(
-                                          'assets/images/TahmKench_0.jpg',
-                                        )
-                                        as ImageProvider
-                                    : NetworkImage(
-                                      Supabase.instance.client.storage
-                                          .from('user_images')
-                                          .getPublicUrl(widget.userImage!),
-                                    ),
+                            backgroundImage: (widget.userImage != null && widget.userImage!.isNotEmpty)
+                                ? NetworkImage(
+                                    Supabase.instance.client.storage
+                                        .from('user_images')
+                                        .getPublicUrl(widget.userImage!),
+                                  )
+                                : null,
+                            child: (widget.userImage == null || widget.userImage!.isEmpty)
+                                ? const Icon(Icons.person, color: Colors.grey, size: 28)
+                                : null,
                           ),
                         ),
                       ),
